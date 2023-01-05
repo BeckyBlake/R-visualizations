@@ -1,6 +1,5 @@
 
 # Assignment 1
-
 # Read in Dataset
 kaggle_survey <- read.csv(file="kaggle_survey_2022.csv", header=TRUE, sep=",")
 
