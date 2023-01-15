@@ -8,6 +8,7 @@ salary_prediction <- read_csv("eda_data.csv")
 library(dplyr)
 job_titles <- select(salary_prediction, 'Job Title')
 
+
 #####################################################################
 # Word cloud visualization
 
@@ -47,7 +48,7 @@ ggplot(salary_prediction,
   labs(title="Scatterplot of age as a predictor of salary",
        x="Age (years)",
        y="Average salary (thousands of dollars)",
-       caption="Figure 2: scatterplot of age and average salary") +
+       caption="Figure 1: scatterplot of age and average salary") +
   geom_smooth(method="lm")
   
 
@@ -81,3 +82,146 @@ ggplot(plotdata,
        y="US State (abbreviated)",
        caption="Figure 3: Cleveland dot plot of average salary by state")
 
+#####################################################################
+
+# Scatterplot of satisfaction and salary
+
+data(salary_prediction)
+
+ggplot(salary_prediction,
+       aes(x=Rating,
+           y=avg_salary)) +
+  geom_point(color="cornflowerblue") +
+  geom_smooth(method="lm") +
+  labs(title="Job satisfaction as a predictor of salary",
+       x="Rating (5 point scale)",
+       y="Average salary (thousands of USD)",
+       caption="Figure 2: Scatterplot with best fit line of job satisfaciton and salary")
+
+#####################################################################
+# bar chart based on industry
+df <- data.frame(salary_prediction)
+
+plotdata2 <- df %>%
+  group_by(Industry) %>%
+  summarize(mean_salary = mean(avg_salary))
+
+plotdata2 <- filter(plotdata2, Industry != -1 &
+                      mean_salary >= 120)
+
+ggplot(plotdata2,
+       aes(x=Industry,
+           y=mean_salary)) +
+  geom_bar(stat="Identity",
+           fill="cornflowerblue") +
+  coord_flip() +
+  theme_classic() +
+  labs(title="Industries with highest average salaries",
+       y = "Mean salary (thousands of USD)",
+       caption="Figure 3: Bar chart of average salaries based on industry")
+
+#####################################################################
+# bar chart of python knowledge
+df3 <- salary_prediction %>%
+  mutate(python_yn = ifelse(python_yn == 1,
+                            "Yes",
+                            "No"),
+         R_yn = ifelse(R_yn == 1,
+                       "Yes",
+                       "No"),
+         spark = ifelse(spark == 1,
+                        "Yes",
+                        "No"),
+         aws = ifelse(aws == 1,
+                      "Yes",
+                      "No"),
+         excel = ifelse(excel == 1,
+                        "Yes",
+                        "No"))
+
+
+plotdata3 <- df3 %>%
+  group_by(python_yn) %>%
+  summarize(mean_salary = mean(avg_salary))
+
+ggplot(plotdata3,
+       aes(x=python_yn,
+           y=mean_salary)) +
+  geom_bar(stat="Identity",
+           fill="cornflowerblue") +
+  theme_classic() +
+  labs(title="Knowledge of Python as predictor of salary",
+       y = "Mean salary (thousands of USD)",
+       x="Knowledge of Python?",
+       caption="Figure 4: Bar chart of Python knowledge and mean salary")
+
+#####################################################################
+# bar chart of R knowledge
+
+plotdata3 <- df3 %>%
+  group_by(R_yn) %>%
+  summarize(mean_salary = mean(avg_salary))
+
+ggplot(plotdata3,
+       aes(x=R_yn,
+           y=mean_salary)) +
+  geom_bar(stat="Identity",
+           fill="cornflowerblue") +
+  theme_classic() +
+  labs(title="Knowledge of R as predictor of salary",
+       y = "Mean salary (thousands of USD)",
+       x="Knowledge of R?",
+       caption="Figure 5: Bar chart of R knowledge and mean salary")
+
+#####################################################################
+# Bar chart of spark knowledge
+plotdata3 <- df3 %>%
+  group_by(spark) %>%
+  summarize(mean_salary = mean(avg_salary))
+
+ggplot(plotdata3,
+       aes(x=spark,
+           y=mean_salary)) +
+  geom_bar(stat="Identity",
+           fill="cornflowerblue") +
+  theme_classic() +
+  labs(title="Knowledge of Spark as predictor of salary",
+       y = "Mean salary (thousands of USD)",
+       x="Knowledge of Spark?",
+       caption="Figure 6: Bar chart of Spark knowledge and mean salary")
+
+#####################################################################
+# Bar chart of aws knowledge
+
+plotdata3 <- df3 %>%
+  group_by(aws) %>%
+  summarize(mean_salary = mean(avg_salary))
+
+ggplot(plotdata3,
+       aes(x=aws,
+           y=mean_salary)) +
+  geom_bar(stat="Identity",
+           fill="cornflowerblue") +
+  theme_classic() +
+  labs(title="Knowledge of AWS as predictor of salary",
+       y = "Mean salary (thousands of USD)",
+       x="Knowledge of AWS?",
+       caption="Figure 7: Bar chart of AWS knowledge and mean salary")
+#####################################################################
+# Bar chart of excel knowledge
+
+plotdata3 <- df3 %>%
+  group_by(excel) %>%
+  summarize(mean_salary = mean(avg_salary))
+
+ggplot(plotdata3,
+       aes(x=excel,
+           y=mean_salary)) +
+  geom_bar(stat="Identity",
+           fill="cornflowerblue") +
+  theme_classic() +
+  labs(title="Knowledge of Excel as predictor of salary",
+       y = "Mean salary (thousands of USD)",
+       x="Knowledge of Excel?",
+       caption="Figure 8: Bar chart of Excel knowledge and mean salary")
+#####################################################################
